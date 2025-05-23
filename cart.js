@@ -15,7 +15,7 @@ function updateCartDisplay() {
     
     // Calculate total amount
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    totalAmount.textContent = `$${total.toFixed(2)}`;
+    totalAmount.textContent = `₹${total.toFixed(2)}`;
     
     // Add items to cart display
     cart.forEach((item, index) => {
@@ -26,7 +26,7 @@ function updateCartDisplay() {
             <div class="cart-item-details">
                 <h3>${item.name}</h3>
             </div>
-            <div class="cart-item-price">$${item.price}</div>
+            <div class="cart-item-price">₹${item.price}</div>
             <div class="cart-item-quantity">
                 <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
                 <span>${item.quantity}</span>
