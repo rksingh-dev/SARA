@@ -1,0 +1,131 @@
+.cart-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    padding: 2rem 0;
+}
+
+.cart-items {
+    background-color: var(--gray-color);
+    padding: 2rem;
+    border-radius: 0.5rem;
+}
+
+.cart-item {
+    display: grid;
+    grid-template-columns: 100px 2fr 1fr 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: var(--white-color);
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+}
+
+.cart-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 0.25rem;
+}
+
+.cart-item-details h3 {
+    font-size: var(--normal-font-size);
+    margin-bottom: 0.5rem;
+}
+
+.cart-item-price {
+    color: var(--first-color);
+    font-weight: var(--font-semi);
+}
+
+.cart-item-quantity {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quantity-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--dark-color);
+}
+
+.quantity-btn:hover {
+    color: var(--first-color);
+}
+
+.cart-item-remove {
+    color: var(--dark-color-light);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.cart-item-remove:hover {
+    color: var(--first-color);
+}
+
+.cart-summary {
+    background-color: var(--gray-color);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    height: fit-content;
+}
+
+.cart-summary-title {
+    font-size: var(--h2-font-size);
+    margin-bottom: 1.5rem;
+}
+
+.cart-total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: var(--normal-font-size);
+}
+
+.checkout-button {
+    width: 100%;
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+    .cart-container {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-item {
+        grid-template-columns: 80px 1fr;
+        grid-template-areas: 
+            "image details"
+            "image price"
+            "image quantity"
+            "image remove";
+        gap: 0.5rem;
+    }
+
+    .cart-item img {
+        width: 80px;
+        height: 80px;
+        grid-area: image;
+    }
+
+    .cart-item-details {
+        grid-area: details;
+    }
+
+    .cart-item-price {
+        grid-area: price;
+    }
+
+    .cart-item-quantity {
+        grid-area: quantity;
+    }
+
+    .cart-item-remove {
+        grid-area: remove;
+    }
+} 

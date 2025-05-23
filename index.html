@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sara - Responsive Ecommerce Landing Page</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="l-header">
+        <nav class="nav bd-grid">
+            <div>
+                <a href="#" class="nav-logo">SARA</a>
+            </div>
+
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
+                    <li class="nav-item"><a href="#featured" class="nav-link">Featured</a></li>
+                    <li class="nav-item"><a href="#new" class="nav-link">New</a></li>
+                    <li class="nav-item"><a href="#subscribed" class="nav-link">Subscribed</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <i class='bx bxs-cart nav-cart'></i>
+                <i class='bx bx-menu nav-toggle' id="nav-toggle"></i>
+            </div>
+        </nav>
+    </header>
+
+    <main class="l-main">
+        <section class="home" id="home">
+            <div class="home-container bd-grid">
+                <div class="home-data">
+                    <h1 class="home-title">NEW <br><span>ARRIVALS</span></h1>
+                    <a href="#featured" class="button">GO SHOPPING</a>
+                </div>
+
+                <img src="https://i.postimg.cc/kg691scD/home.png" alt="image" class="home-img">
+            </div>
+        </section>
+
+        <section class="collection section">
+            <div class="collection-container bd-grid">
+                <div class="collection-box">
+                    <img src="https://i.postimg.cc/Df1KXmz4/backpack-Man.png" alt="Men's Backpack" class="collection-img">
+                    <div class="collection-data">
+                        <h2 class="collection-title"><span class="collection-subtitle">Men</span><br>Backpack</h2>
+                        <a href="product.html?id=men-backpack" class="collection-view">View Collection</a>
+                    </div>
+                </div>
+
+                <div class="collection-box">
+                    <div class="collection-data">
+                        <h2 class="collection-title"><span class="collection-subtitle">Women</span><br>Backpack</h2>
+                        <a href="product.html?id=women-backpack" class="collection-view">View Collection</a>
+                    </div>
+                    <img src="https://i.postimg.cc/tT0MqtWS/backpack-Woman.png" alt="Women's Backpack" class="collection-img">
+                </div>
+            </div>
+        </section>
+
+        <section class="featured section" id="featured">
+            <h2 class="section-title">FEATURED PRODUCT</h2>
+            <a href="#" class="section-all">View All</a>
+
+            <div class="featured-container bd-grid">
+                <div class="featured-product">
+                    <div class="featured-box">
+                        <div class="featured-new">NEW</div>
+                        <img src="https://i.postimg.cc/ydMgrWqS/feature1.png" alt="featured image" class="featured-img">
+                        <div class="featured-link">
+                            <button class="button">VIEW PRODUCT</button>
+                        </div>
+                    </div>
+                    <div class="featured-data">
+                        <h3 class="featured-name">Black Headphone One</h3>
+                        <div class="featured-price">
+                            <span style="text-decoration: line-through; color: #606060; margin-right: 0.5rem;">₹2,499</span>
+                            <span style="color: #E55947;">₹1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="featured-product">
+                    <div class="featured-box">
+                        <div class="featured-new">NEW</div>
+                        <img src="https://i.postimg.cc/PJbx34zB/feature2.png" alt="featured image" class="featured-img">
+                        <div class="featured-link">
+                            <button class="button">VIEW PRODUCT</button>
+                        </div>
+                    </div>
+                    <div class="featured-data">
+                        <h3 class="featured-name">Speaker Beats Pill</h3>
+                        <span class="featured-price">₹7,999</span>
+                    </div>
+                </div>
+
+                <div class="featured-product">
+                    <div class="featured-box">
+                        <div class="featured-new">NEW</div>
+                        <img src="https://i.postimg.cc/KvF4K6mF/feature3.png" alt="featured image" class="featured-img">
+                        <div class="featured-link">
+                            <button class="button">VIEW PRODUCT</button>
+                        </div>
+                    </div>
+                    <div class="featured-data">
+                        <h3 class="featured-name">Apple Air Pods</h3>
+                        <span class="featured-price">₹10,999</span>
+                    </div>
+                </div>
+
+                <div class="featured-product">
+                    <div class="featured-box">
+                        <div class="featured-new">NEW</div>
+                        <img src="https://i.postimg.cc/RZp0DqKV/feature4.png" alt="featured image" class="featured-img">
+                        <div class="featured-link">
+                            <button class="button">VIEW PRODUCT</button>
+                        </div>
+                    </div>
+                    <div class="featured-data">
+                        <h3 class="featured-name">Smart Watch F9 Negro</h3>
+                        <span class="featured-price">₹4,999</span>
+                    </div>
+                </div>
+            </div>  
+        </section>
+
+        <section class="offer section">
+            <div class="offer-bg">
+                <div class="offer-data">
+                    <h2 class="offer-title">Special Offer</h2>
+                    <p class="offer-description">Special offerts discounts for women this week only</p>
+
+                    <a href="#" class="button">SHOP NOW</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="new section" id="new">
+            <h2 class="section-title">NEW ARRIVALS</h2>
+            <a href="#" class="section-all">View All</a>
+
+            <div class="new-container bd-grid">
+                <div class="new-box">
+                    <img src="https://i.postimg.cc/Hs5KNNMJ/new1.png" alt="Black Backpack" class="new-img">
+                    <div class="new-link">
+                        <button class="button" onclick="window.location.href='product.html?id=n1'">VIEW PRODUCT</button>
+                    </div>
+                </div>
+
+                <div class="new-box">
+                    <img src="https://i.postimg.cc/sXq66PD9/new2.png" alt="Quilted Bag" class="new-img">
+                    <div class="new-link">
+                        <button class="button" onclick="window.location.href='product.html?id=n2'">VIEW PRODUCT</button>
+                    </div>
+                </div>
+
+                <div class="new-box">
+                    <img src="https://i.postimg.cc/rs4hvdD6/new3.png" alt="Aviator Sunglasses" class="new-img">
+                    <div class="new-link">
+                        <button class="button" onclick="window.location.href='product.html?id=n3'">VIEW PRODUCT</button>
+                    </div>
+                </div>
+
+                <div class="new-box">
+                    <img src="https://i.postimg.cc/sDFH5JL3/new4.png" alt="Smart Watch" class="new-img">
+                    <div class="new-link">
+                        <button class="button" onclick="window.location.href='product.html?id=n4'">VIEW PRODUCT</button>
+                    </div>
+                </div>
+
+                <div class="new-box">
+                    <img src="https://i.postimg.cc/Bnph9fnv/new5.png" alt="Leather Wallet" class="new-img">
+                    <div class="new-link">
+                        <button class="button" onclick="window.location.href='product.html?id=n5'">VIEW PRODUCT</button>
+                    </div>
+                </div>
+
+                <div class="new-box">
+                    <img src="https://i.postimg.cc/SKtDRL8F/new6.png" alt="Designer Handbag" class="new-img">
+                    <div class="new-link">
+                        <button class="button" onclick="window.location.href='product.html?id=n6'">VIEW PRODUCT</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="newsletter section" id="subscribed">
+            <div class="newsletter-container bd-grid">
+                <div class="newsletter-subscribe">
+                    <h2 class="section-title">OUR NEWSLETTER</h2>
+                    <p class="newsletter-description">Promotion news products and sales. Directly to you</p>
+
+                    <form action="" class="newsletter-form">
+                        <input type="text" class="newsletter-input" placeholder="Enter your email">
+                        <a href="#" class="button">SUBSCRIBE</a>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section class="sponsors section">
+            <div class="sponsors-container bd-grid">
+                <div class="sponsors-logo">
+                    <img src="https://i.postimg.cc/3Jv5TRsx/logo1.png" alt="image logo">
+                </div>
+
+                <div class="sponsors-logo">
+                    <img src="https://i.postimg.cc/bJBWXcLn/logo2.png" alt="image logo">
+                </div>
+
+                <div class="sponsors-logo">
+                    <img src="https://i.postimg.cc/J0HgM6d2/logo3.png" alt="image logo">
+                </div>
+
+                <div class="sponsors-logo">
+                    <img src="https://i.postimg.cc/xjkTX9wW/logo4.png" alt="image logo">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer section">
+        <div class="footer-container bd-grid">
+            <div class="footer-box">
+                <h3 class="footer-title">SARA</h3>
+                <p class="footer-deal">Products Store</p>
+
+                <a href="#"><img src="https://i.postimg.cc/sgtFn03x/footerstore1.png" alt="image" class="footer-store"></a>
+                <a href="#"><img src="https://i.postimg.cc/pd8w3YdZ/footerstore2.png" alt="image" class="footer-store"></a>
+            </div>
+
+            <div class="footer-box">
+                <h3 class="footer-title">EXPLORE</h3>
+
+                <ul>
+                    <li><a href="#" class="footer-link">Home</a></li>
+                    <li><a href="#" class="footer-link">Featured</a></li>
+                    <li><a href="#" class="footer-link">New</a></li>
+                    <li><a href="#" class="footer-link">Subscribe</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-box">
+                <h3 class="footer-title">OUR SERVICES</h3>
+
+                <ul>
+                    <li><a href="#" class="footer-link">Pricing</a></li>
+                    <li><a href="#" class="footer-link">Free Shipping</a></li>
+                    <li><a href="#" class="footer-link">Gift Cards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-box">
+                <h3 class="footer-title">FOLLOW US</h3>
+
+                <a href="#" class="footer-social"><i class='bx bxl-facebook'></i></a>
+                <a href="#" class="footer-social"><i class='bx bxl-instagram'></i></a>
+                <a href="#" class="footer-social"><i class='bx bxl-youtube'></i></a>
+            </div>
+        </div>
+
+        <p class="footer-copy">&#169; 2024 Copyright All rights reserved</p>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
