@@ -47,7 +47,7 @@ function initializeRazorpay(totalAmount) {
     // Test key format: rzp_test_XXXXXXXXXXXXXXX
     // Live key format: rzp_live_XXXXXXXXXXXXXXX
     const options = {
-        key: "rzp_test_YOUR_KEY_HERE", // Replace with your actual Razorpay key
+        key: "rzp_live_nvxqYOmvrMDGB4", // Replace with your actual Razorpay key
         amount: totalAmount * 100, // Convert amount to paise
         currency: "INR",
         name: "SARA Store",
