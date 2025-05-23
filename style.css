@@ -267,6 +267,19 @@ img { max-width: 100%; height: auto; }
     font-size: var(--small-font-size); 
 }
 
+.footer-contact {
+    margin-bottom: var(--mb-4);
+    color: var(--dark-color-light);
+}
+
+.footer-title {
+    margin-bottom: var(--mb-1);
+}
+
+.footer-link:hover {
+    color: var(--first-color);
+}
+
 /*MEDIA QUERIES*/
 
 @media screen and (min-width: 768px) {
