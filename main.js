@@ -1,9 +1,54 @@
+// Animation Observer
+const animationObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in');
+            animationObserver.unobserve(entry.target);
+        }
+    });
+}, {
+    threshold: 0.1,
+    rootMargin: '50px'
+});
+
+// Animate elements on scroll
+document.addEventListener('DOMContentLoaded', () => {
+    // Animate sections
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => {
+        animationObserver.observe(section);
+    });
+
+    // Animate products with slide-up
+    const products = document.querySelectorAll('.featured-product, .new-box');
+    products.forEach(product => {
+        product.classList.add('slide-up');
+        animationObserver.observe(product);
+    });
+
+    // Animate collection boxes with scale-in
+    const collections = document.querySelectorAll('.collection-box');
+    collections.forEach(collection => {
+        collection.classList.add('scale-in');
+        animationObserver.observe(collection);
+    });
+});
+
 //Mobile Menu
 const showMenu = (toggleId, navId) => {
     const toggle = document.getElementById(toggleId);
     const nav = document.getElementById(navId);
 
-    if(toggle && nav){ toggle.addEventListener('click', () => { nav.classList.toggle('show'); }) } 
+    if(toggle && nav){ 
+        toggle.addEventListener('click', () => { 
+            nav.classList.toggle('show');
+            // Add slide animation to menu items
+            const menuItems = nav.querySelectorAll('.nav-item');
+            menuItems.forEach((item, index) => {
+                item.style.animation = item.style.animation ? '' : `slideUp 0.3s ease forwards ${index * 0.1}s`;
+            });
+        });
+    } 
 }
 
 showMenu('nav-toggle','nav-menu');
@@ -21,10 +66,23 @@ function linkAction() {
 
 navLink.forEach(n => n.addEventListener('click', linkAction));
 
-// Cart icon navigation
+// Cart icon navigation with animation
 const cartIcon = document.querySelector('.nav-cart');
 cartIcon.addEventListener('click', () => {
-    window.location.href = 'cart.html';
+    cartIcon.style.transform = 'scale(0.8)';
+    setTimeout(() => {
+        window.location.href = 'cart.html';
+    }, 200);
+});
+
+// Smooth animation for buttons
+document.querySelectorAll('.button').forEach(button => {
+    button.addEventListener('mouseenter', () => {
+        button.style.transform = 'translateY(-2px)';
+    });
+    button.addEventListener('mouseleave', () => {
+        button.style.transform = 'translateY(0)';
+    });
 });
 
 // View Product button navigation for featured products
@@ -34,7 +92,10 @@ document.querySelectorAll('.featured-product').forEach((product, idx) => {
     if (btn) {
         btn.textContent = 'VIEW PRODUCT';
         btn.onclick = () => {
-            window.location.href = `product.html?id=${featuredIds[idx]}`;
+            btn.classList.add('scale-in');
+            setTimeout(() => {
+                window.location.href = `product.html?id=${featuredIds[idx]}`;
+            }, 300);
         };
     }
 });
@@ -46,7 +107,10 @@ document.querySelectorAll('.new-box').forEach((product, idx) => {
     if (btn) {
         btn.textContent = 'VIEW PRODUCT';
         btn.onclick = () => {
-            window.location.href = `product.html?id=${newIds[idx]}`;
+            btn.classList.add('scale-in');
+            setTimeout(() => {
+                window.location.href = `product.html?id=${newIds[idx]}`;
+            }, 300);
         };
     }
 }); 
