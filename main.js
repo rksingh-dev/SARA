@@ -32,6 +32,24 @@ document.addEventListener('DOMContentLoaded', () => {
         collection.classList.add('scale-in');
         animationObserver.observe(collection);
     });
+
+    // Home section parallax effect
+    const homeImg = document.querySelector('.home-img');
+    const homeTitle = document.querySelector('.home-title');
+    
+    if (homeImg && homeTitle) {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * 0.5;
+            
+            // Parallax effect for home image
+            homeImg.style.transform = `translate3d(0, ${rate}px, 0)`;
+            
+            // Fade out effect for title
+            const opacity = 1 - (scrolled / 500);
+            homeTitle.style.opacity = opacity > 0 ? opacity : 0;
+        });
+    }
 });
 
 //Mobile Menu
