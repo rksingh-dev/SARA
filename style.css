@@ -52,6 +52,41 @@
     animation: scaleIn 0.4s var(--transition-timing) forwards;
 }
 
+/* Home Page Specific Animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes floatAnimation {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -157,9 +192,22 @@ img { max-width: 100%; height: auto; }
 
 /*HOME*/
 
-.home { background-color: var(--gray-color); }
-.home-container { height: calc(100vh - var(--header-height)); }
-.home-data { padding-top: 6rem; }
+.home { 
+    background-color: var(--gray-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.home-container { 
+    height: calc(100vh - var(--header-height));
+    position: relative;
+}
+
+.home-data { 
+    padding-top: 6rem;
+    opacity: 0;
+    animation: slideInLeft 0.8s var(--transition-timing) 0.2s forwards;
+}
 
 .home-title {
     align-self: center;
@@ -167,10 +215,44 @@ img { max-width: 100%; height: auto; }
     line-height: 1;
     letter-spacing: .5rem;
     margin-bottom: 4rem;
+    opacity: 0;
+    animation: slideInLeft 0.8s var(--transition-timing) 0.4s forwards;
 }
 
-    .home-title span { font-size: var(--h1-font-size); }
-.home-img { position: absolute; right: 0; bottom: 0; width: 260px; }
+.home-title span { 
+    font-size: var(--h1-font-size);
+    display: inline-block;
+    opacity: 0;
+    animation: slideInLeft 0.8s var(--transition-timing) 0.6s forwards;
+}
+
+.home-img { 
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 260px;
+    opacity: 0;
+    animation: slideInRight 1s var(--transition-timing) 0.6s forwards,
+               floatAnimation 4s ease-in-out infinite;
+}
+
+/* Add a subtle gradient overlay */
+.home::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        45deg,
+        rgba(229, 89, 71, 0.1) 0%,
+        rgba(250, 250, 255, 0.05) 100%
+    );
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1s var(--transition-timing) 1s forwards;
+}
 
 .button {
     display: inline-block;
