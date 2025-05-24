@@ -1,3 +1,80 @@
+// Music Player Functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const audio = document.getElementById('bgMusic');
+    const musicToggle = document.querySelector('.music-toggle');
+    const musicWaves = document.querySelector('.music-waves');
+    const playIcon = musicToggle.querySelector('i');
+    
+    let isPlaying = false;
+
+    // Function to play music
+    function playMusic() {
+        audio.volume = 0.3; // Set a comfortable volume
+        audio.play()
+            .then(() => {
+                isPlaying = true;
+                updateMusicUI();
+            })
+            .catch(error => {
+                console.error('Error playing audio:', error);
+            });
+    }
+
+    // Function to pause music
+    function pauseMusic() {
+        audio.pause();
+        isPlaying = false;
+        updateMusicUI();
+    }
+
+    // Update UI based on music state
+    function updateMusicUI() {
+        if (isPlaying) {
+            playIcon.classList.remove('bx-play');
+            playIcon.classList.add('bx-pause');
+            musicWaves.classList.remove('paused');
+            musicToggle.style.background = 'var(--first-color-alt)';
+        } else {
+            playIcon.classList.remove('bx-pause');
+            playIcon.classList.add('bx-play');
+            musicWaves.classList.add('paused');
+            musicToggle.style.background = 'var(--first-color)';
+        }
+    }
+
+    // Toggle music on button click
+    musicToggle.addEventListener('click', () => {
+        if (isPlaying) {
+            pauseMusic();
+        } else {
+            playMusic();
+        }
+    });
+
+    // Handle page visibility change
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden && isPlaying) {
+            audio.pause();
+        } else if (!document.hidden && isPlaying) {
+            audio.play().catch(console.error);
+        }
+    });
+
+    // Store music state in localStorage
+    window.addEventListener('beforeunload', () => {
+        localStorage.setItem('musicPlaying', isPlaying);
+    });
+
+    // Restore music state on page load
+    const wasPlaying = localStorage.getItem('musicPlaying') === 'true';
+    if (wasPlaying) {
+        playMusic();
+    }
+
+    // Initialize UI
+    updateMusicUI();
+});
+
 // Animation Observer
 const animationObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
