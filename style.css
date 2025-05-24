@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
 
 :root {
     --header-height: 3rem;
@@ -13,7 +13,15 @@
     --dark-color-light: #606060;
     --gray-color: #F0F1F3;
 
-    --body-font: 'Open Sans', sans-serif;
+    --title-font: 'Playfair Display', serif;
+    --body-font: 'Montserrat', sans-serif;
+
+    --section-spacing: 120px;
+    --element-spacing: 2rem;
+
+    --display-size: 4.5rem;
+    --h1-size: 3.5rem;
+    --h2-size: 2.5rem;
 
     --big-font-size: 3rem;
     --h1-font-size: 1.5rem;
