@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SARA</title>
-     <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -229,7 +229,7 @@
             <div class="footer-box">
                 <h3 class="footer-title">SARA</h3>
                 <p class="footer-deal">Products Store</p>
-                
+      
 
                 <a href="#"><img src="https://i.postimg.cc/sgtFn03x/footerstore1.png" alt="image" class="footer-store"></a>
                 <a href="#"><img src="https://i.postimg.cc/pd8w3YdZ/footerstore2.png" alt="image" class="footer-store"></a>
@@ -263,8 +263,30 @@
             </div>
         </div>
 
-        <p class="footer-copy">&#169; 2025 Copyright All rights reserved , Owned by RKS</p>
+        <p class="footer-copy">&#169; 2024 Copyright All rights reserved</p>
     </footer>
+
+    <!-- Background Music Player -->
+    <div class="music-player">
+        <audio id="bgMusic" loop>
+            <source src="sara.mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="music-control">
+            <div class="music-info">
+                <span class="song-name"></span>
+                <div class="music-waves">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <button class="music-toggle">
+                <i class='bx bx-play'></i>
+            </button>
+        </div>
+    </div>
 
     <script src="main.js"></script>
 </body>
