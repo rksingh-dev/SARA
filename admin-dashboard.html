@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Sara</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.js"></script>
+    <script>
+      // Check both email and MetaMask authentication
+      if (!window.location.pathname.endsWith('auth.html')) {
+        const isMetaMaskConnected = localStorage.getItem('walletConnected') === 'true';
+        const isEmailAuthenticated = localStorage.getItem('sara_auth');
+        
+        // Redirect to auth if neither method is authenticated
+        if (!isMetaMaskConnected && !isEmailAuthenticated) {
+          window.location.href = 'auth.html';
+        }
+      }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <img src="logo.png" alt="Logo">
+                <h2>Sara</h2>
+            </div>
+            <div class="menu">
+                <li><a href="dashboard.html"><i class='bx bx-home'></i>Home</a></li>
+                <li><a href="transactions.html"><i class='bx bx-money'></i>Transactions</a></li>
+                <li><a href="customers.html"><i class='bx bx-user'></i>Customers</a></li>
+                <li><a href="products.html"><i class='bx bx-store'></i>Products</a></li>
+                <li><a href="settings.html"><i class='bx bx-cog'></i>Settings</a></li>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <h2>Dashboard</h2>
+                <div class="search-bar">
+                    <input type="text" placeholder="Search...">
+                    <i class='bx bx-search'></i>
+                </div>
+                <div class="user-info">
+                    <img src="user.png" alt="User">
+                    <span>John Doe</span>
+                </div>
+            </div>
+            <div class="content">
+                <div class="cards">
+                    <div class="card">
+                        <i class='bx bx-money'></i>
+                        <span class="card-title">Total Revenue</span>
+                        <span class="card-value">$1,234,567</span>
+                    </div>
+                    <div class="card">
+                        <i class='bx bx-user'></i>
+                        <span class="card-title">Total Customers</span>
+                        <span class="card-value">1,234</span>
+                    </div>
+                    <div class="card">
+                        <i class='bx bx-store'></i>
+                        <span class="card-title">Total Products</span>
+                        <span class="card-value">1,234</span>
+                    </div>
+                    <div class="card">
+                        <i class='bx bx-transaction'></i>
+                        <span class="card-title">Total Transactions</span>
+                        <span class="card-value">1,234</span>
+                    </div>
+                </div>
+                <div class="charts">
+                    <div class="chart">
+                        <h2>Revenue</h2>
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                    <div class="chart">
+                        <h2>Customers</h2>
+                        <canvas id="customersChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
