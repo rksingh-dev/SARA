@@ -1,4 +1,4 @@
-# Sara - Luxury E-commerce Platform
+# SARA - Luxury E-commerce Platform
 
 A sophisticated e-commerce platform built with modern web technologies, featuring multiple payment methods, secure authentication, and an elegant user interface.
 
