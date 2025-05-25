@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - SARA Store</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.js"></script>
+    <script>
+      // Check both email and MetaMask authentication
+      if (!window.location.pathname.endsWith('auth.html')) {
+        const isMetaMaskConnected = localStorage.getItem('walletConnected') === 'true';
+        const isEmailAuthenticated = localStorage.getItem('sara_auth');
+        
+        // Redirect to auth if neither method is authenticated
+        if (!isMetaMaskConnected && !isEmailAuthenticated) {
+          window.location.href = 'auth.html';
+        }
+      }
+    </script>
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 20px;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .admin-title {
+            color: #E55947;
+            font-size: 2rem;
+        }
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .stat-card h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .stat-card p {
+            font-size: 1.5rem;
+            color: #E55947;
+            font-weight: bold;
+        }
+        .admin-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .action-button {
+            background: #E55947;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .action-button:hover {
+            background: #d44a38;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1 class="admin-title">SARA Admin Panel</h1>
+            <button class="action-button" onclick="window.location.href='index.html'">
+                <i class='bx bx-home'></i> Back to Store
+            </button>
+        </div>
+
+        <div class="admin-stats">
+            <div class="stat-card">
+                <h3>Total Orders</h3>
+                <p>1,234</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Revenue</h3>
+                <p>₹12,34,567</p>
+            </div>
+            <div class="stat-card">
+                <h3>Active Users</h3>
+                <p>567</p>
+            </div>
+            <div class="stat-card">
+                <h3>Products</h3>
+                <p>89</p>
+            </div>
+        </div>
+
+        <div class="admin-actions">
+            <a href="admin-dashboard.html" class="action-button">
+                <i class='bx bx-line-chart'></i> View Dashboard
+            </a>
+            <a href="#" class="action-button">
+                <i class='bx bx-package'></i> Manage Products
+            </a>
+            <a href="#" class="action-button">
+                <i class='bx bx-user'></i> Manage Users
+            </a>
+            <a href="#" class="action-button">
+                <i class='bx bx-money'></i> View Orders
+            </a>
+        </div>
+    </div>
+
+    <script>
+    (async function() {
+        const magic = new Magic('pk_live_553444119EF570C8');
+        const isLoggedIn = await magic.user.isLoggedIn();
+        if (!isLoggedIn) {
+            window.location.href = 'auth.html';
+        }
+    })();
+    </script>
+</body>
+</html> 
