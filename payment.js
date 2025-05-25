@@ -44,10 +44,18 @@ function showThankYouPopup(paymentId) {
 }
 
 function initializeRazorpay(totalAmount) {
-    // Test key format: rzp_test_XXXXXXXXXXXXXXX
-    // Live key format: rzp_live_XXXXXXXXXXXXXXX
+    // Get the Razorpay key from environment or configuration
+    const razorpayKey = "rzp_live_nvxqYOmvrMDGB4"; // Live Razorpay key
+
+    // Validate the key format
+    if (!razorpayKey || !razorpayKey.startsWith('rzp_test_') && !razorpayKey.startsWith('rzp_live_')) {
+        console.error('Invalid Razorpay key format');
+        alert('Payment system is not properly configured. Please contact support.');
+        return;
+    }
+
     const options = {
-        key: "rzp_live_nvxqYOmvrMDGB4", // Replace with your actual Razorpay key
+        key: razorpayKey,
         amount: totalAmount * 100, // Convert amount to paise
         currency: "INR",
         name: "SARA Store",
@@ -72,22 +80,60 @@ function initializeRazorpay(totalAmount) {
             ondismiss: function() {
                 console.log('Payment modal closed');
             }
+        },
+        config: {
+            display: {
+                blocks: {
+                    banks: {
+                        name: "Pay using UPI",
+                        instruments: [
+                            {
+                                method: "upi"
+                            }
+                        ]
+                    },
+                    cards: {
+                        name: "Pay using Cards",
+                        instruments: [
+                            {
+                                method: "card"
+                            }
+                        ]
+                    }
+                },
+                sequence: ["block.banks", "block.cards"],
+                preferences: {
+                    show_default_blocks: true
+                }
+            }
         }
     };
 
     try {
-        if (!options.key.startsWith('rzp_')) {
-            throw new Error('Invalid Razorpay key format. Key should start with "rzp_test_" or "rzp_live_"');
-        }
         const rzp = new Razorpay(options);
+        
+        // Handle payment success
+        rzp.on('payment.success', function (response) {
+            console.log('Payment successful:', response);
+        });
+
+        // Handle payment failure
         rzp.on('payment.failed', function (response) {
             console.error("Payment failed:", response.error);
             alert("Payment Failed: " + response.error.description);
         });
+
+        // Handle payment error
+        rzp.on('payment.error', function (response) {
+            console.error("Payment error:", response.error);
+            alert("Payment Error: " + response.error.description);
+        });
+
+        // Open the payment modal
         rzp.open();
     } catch (error) {
         console.error("Error initializing Razorpay:", error);
-        alert("Unable to initialize payment. Please ensure you have configured your Razorpay key correctly.");
+        alert("Unable to initialize payment. Please try again later.");
     }
 }
 
