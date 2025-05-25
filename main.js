@@ -367,4 +367,342 @@ document.querySelectorAll('.new-box').forEach((product, idx) => {
             }, 300);
         };
     }
+});
+
+// Wallet connect logic
+window.addEventListener('DOMContentLoaded', async () => {
+  // Initialize Magic SDK for email OTP
+  const magic = new Magic('pk_live_553444119EF570C8', { network: 'mainnet' });
+  
+  const connectBtn = document.getElementById('connect-wallet-btn');
+  const addressSpan = document.getElementById('wallet-address');
+
+  // Hide the original navbar elements
+  if (connectBtn) connectBtn.style.display = 'none';
+  if (addressSpan) addressSpan.style.display = 'none';
+
+  // Create wallet section container
+  const walletSection = document.createElement('div');
+  walletSection.className = 'wallet-section';
+  walletSection.style.cssText = `
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  `;
+
+  // Create wallet status container
+  const walletStatusContainer = document.createElement('div');
+  walletStatusContainer.style.cssText = `
+    background: white;
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(223, 96, 79, 0.1);
+    min-width: 200px;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+  `;
+
+  // Create wallet icon
+  const walletIcon = document.createElement('i');
+  walletIcon.className = 'bx bxs-wallet';
+  walletIcon.style.cssText = `
+    font-size: 1.5rem;
+    color: var(--first-color);
+  `;
+
+  // Create wallet status text
+  const walletStatus = document.createElement('span');
+  walletStatus.style.cssText = `
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    color: var(--dark-color);
+  `;
+
+  // Create wallet details container
+  const walletDetails = document.createElement('div');
+  walletDetails.style.cssText = `
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 1.2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    display: none;
+    min-width: 300px;
+    border: 1px solid rgba(223, 96, 79, 0.1);
+    backdrop-filter: blur(10px);
+    margin-bottom: 0.5rem;
+  `;
+
+  // Add elements to DOM
+  walletStatusContainer.appendChild(walletIcon);
+  walletStatusContainer.appendChild(walletStatus);
+  walletSection.appendChild(walletDetails);
+  walletSection.appendChild(walletStatusContainer);
+  document.body.appendChild(walletSection);
+
+  // Add hover effect
+  walletStatusContainer.addEventListener('mouseenter', () => {
+    walletStatusContainer.style.background = 'rgba(223, 96, 79, 0.05)';
+    walletStatusContainer.style.transform = 'translateY(-2px)';
+  });
+
+  walletStatusContainer.addEventListener('mouseleave', () => {
+    walletStatusContainer.style.background = 'rgba(255, 255, 255, 0.95)';
+    walletStatusContainer.style.transform = 'translateY(0)';
+  });
+
+  // Toggle wallet details
+  walletStatusContainer.addEventListener('click', () => {
+    const isVisible = walletDetails.style.display === 'block';
+    walletDetails.style.display = isVisible ? 'none' : 'block';
+  });
+
+  // Close wallet details when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!walletSection.contains(e.target)) {
+      walletDetails.style.display = 'none';
+    }
+  });
+
+  async function showWalletAddress() {
+    try {
+      // Clear any existing wallet display first
+      walletSection.style.display = 'none';
+
+      // Check authentication methods
+      const isMetaMaskConnected = localStorage.getItem('walletType') === 'metamask';
+      const isEmailAuthenticated = localStorage.getItem('sara_auth');
+
+      // If logged in with email only
+      if (isEmailAuthenticated && !isMetaMaskConnected) {
+        // Don't show wallet section for email login
+        walletSection.style.display = 'none';
+        return;
+      }
+
+      // If logged in with MetaMask
+      if (isMetaMaskConnected) {
+        await connectMetaMask();
+        return;
+      }
+
+      // If not logged in at all
+      walletStatus.textContent = 'Connect Wallet';
+      walletSection.style.display = 'none';
+    } catch (err) {
+      console.error('Error showing wallet address:', err);
+      walletStatus.textContent = 'Connection Error';
+      walletSection.style.display = 'none';
+    }
+  }
+
+  async function connectMetaMask() {
+    try {
+      if (typeof window.ethereum === 'undefined') {
+        throw new Error('MetaMask is not installed');
+      }
+
+      // Request account access
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const address = accounts[0];
+      
+      if (address) {
+        walletStatus.textContent = 'Connected';
+        walletSection.style.display = 'flex';
+        
+        // Get ETH balance
+        const balance = await window.ethereum.request({
+          method: 'eth_getBalance',
+          params: [address, 'latest']
+        });
+        const ethBalance = (parseInt(balance, 16) / 1e18).toFixed(4);
+        
+        // Update wallet details content
+        walletDetails.innerHTML = `
+          <div style="margin-bottom: 1.5rem;">
+            <div style="font-size: 0.8rem; color: #666; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">MetaMask Wallet</div>
+            <div style="
+              background: rgba(248, 248, 248, 0.8);
+              padding: 1rem;
+              border-radius: 8px;
+              font-family: monospace;
+              font-size: 0.9rem;
+              word-break: break-all;
+              color: var(--dark-color);
+              border: 1px solid rgba(0, 0, 0, 0.05);
+            ">${address}</div>
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <div style="font-size: 0.8rem; color: #666; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Balance</div>
+            <div style="
+              background: rgba(248, 248, 248, 0.8);
+              padding: 0.8rem;
+              border-radius: 8px;
+              font-family: 'Montserrat', sans-serif;
+              font-size: 0.9rem;
+              color: var(--dark-color);
+              border: 1px solid rgba(0, 0, 0, 0.05);
+            ">${ethBalance} ETH</div>
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <div style="font-size: 0.8rem; color: #666; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Network</div>
+            <div style="
+              background: rgba(248, 248, 248, 0.8);
+              padding: 0.8rem;
+              border-radius: 8px;
+              font-family: 'Montserrat', sans-serif;
+              font-size: 0.9rem;
+              color: var(--dark-color);
+              border: 1px solid rgba(0, 0, 0, 0.05);
+            ">${window.ethereum.networkVersion === '1' ? 'Ethereum Mainnet' : 'Test Network'}</div>
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <button id="view-transactions" style="
+              width: 100%;
+              padding: 0.8rem;
+              background: var(--first-color);
+              color: white;
+              border: none;
+              border-radius: 8px;
+              cursor: pointer;
+              font-family: 'Montserrat', sans-serif;
+              transition: all 0.3s ease;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+              font-size: 0.9rem;
+              margin-bottom: 0.5rem;
+            ">View Transactions</button>
+            <button id="disconnect-wallet" style="
+              width: 100%;
+              padding: 0.8rem;
+              background: var(--first-color);
+              color: white;
+              border: none;
+              border-radius: 8px;
+              cursor: pointer;
+              font-family: 'Montserrat', sans-serif;
+              transition: all 0.3s ease;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+              font-size: 0.9rem;
+            ">Disconnect Wallet</button>
+          </div>
+        `;
+
+        // Add view transactions functionality
+        document.getElementById('view-transactions').addEventListener('click', () => {
+          const network = window.ethereum.networkVersion === '1' ? '' : 'goerli.';
+          window.open(`https://${network}etherscan.io/address/${address}`, '_blank');
+        });
+
+        // Add disconnect functionality
+        document.getElementById('disconnect-wallet').addEventListener('click', async () => {
+          try {
+            localStorage.removeItem('walletConnected');
+            localStorage.removeItem('walletType');
+            localStorage.removeItem('walletAddress');
+            window.location.href = 'auth.html';
+          } catch (err) {
+            console.error('Disconnect error:', err);
+          }
+        });
+
+        // Store connection state
+        localStorage.setItem('walletConnected', 'true');
+        localStorage.setItem('walletType', 'metamask');
+        localStorage.setItem('walletAddress', address);
+      }
+    } catch (error) {
+      console.error('Error connecting wallet:', error);
+      walletStatus.textContent = 'Connection Failed';
+      if (error.message === 'MetaMask is not installed') {
+        alert('Please install MetaMask to connect your wallet');
+      }
+    }
+  }
+
+  // Show wallet address on page load if already logged in
+  showWalletAddress();
+
+  // Add click handler to connect wallet
+  walletStatusContainer.addEventListener('click', async () => {
+    if (walletStatus.textContent === 'Connect Wallet') {
+      // Show connection options
+      walletDetails.innerHTML = `
+        <div style="margin-bottom: 1rem;">
+          <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--dark-color);">Choose Connection Method</h3>
+          <button id="connect-metamask" style="
+            width: 100%;
+            padding: 0.8rem;
+            background: #E2761B;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+          ">Connect with MetaMask</button>
+          <button id="connect-email" style="
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--first-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+          ">Connect with Email</button>
+        </div>
+      `;
+
+      walletDetails.style.display = 'block';
+
+      // Add click handlers for connection options
+      document.getElementById('connect-metamask').addEventListener('click', async () => {
+        await connectMetaMask();
+      });
+
+      document.getElementById('connect-email').addEventListener('click', () => {
+        window.location.href = 'auth.html';
+      });
+    }
+  });
+
+  // Listen for MetaMask account changes
+  if (window.ethereum) {
+    window.ethereum.on('accountsChanged', function (accounts) {
+      if (accounts.length === 0) {
+        // User disconnected their wallet
+        localStorage.removeItem('walletConnected');
+        localStorage.removeItem('walletType');
+        walletSection.style.display = 'none';
+      } else {
+        // Account changed, update the display
+        connectMetaMask();
+      }
+    });
+
+    window.ethereum.on('chainChanged', function () {
+      // Reload the page when the chain changes
+      window.location.reload();
+    });
+  }
 }); 
