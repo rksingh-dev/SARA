@@ -4,7 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - SARA Store</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="style.css">
+    <script>
+      // Check both email and MetaMask authentication
+      if (!window.location.pathname.endsWith('auth.html')) {
+        const isMetaMaskConnected = localStorage.getItem('walletConnected') === 'true';
+        const isEmailAuthenticated = localStorage.getItem('sara_auth');
+        
+        // Redirect to auth if neither method is authenticated
+        if (!isMetaMaskConnected && !isEmailAuthenticated) {
+          window.location.href = 'auth.html';
+        }
+      }
+    </script>
     <style>
         .policy-container {
             max-width: 800px;
