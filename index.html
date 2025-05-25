@@ -7,12 +7,24 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style.css">
+    <script>
+      // Single authentication check
+      if (!window.location.pathname.endsWith('auth.html')) {
+        const isMetaMaskConnected = localStorage.getItem('walletConnected') === 'true';
+        const isEmailAuthenticated = localStorage.getItem('sara_auth');
+        
+        // Allow access if either authentication method is active
+        if (!isMetaMaskConnected && !isEmailAuthenticated) {
+          window.location.replace('auth.html');
+        }
+      }
+    </script>
 </head>
 <body>
     <header class="l-header">
         <nav class="nav bd-grid">
             <div>
-                <a href="#" class="nav-logo">SARA</a>
+                <a href="#" class="nav-logo" style="font-family: 'Playfair Display', serif; letter-spacing: 0.2em;">SARA</a>
             </div>
 
             <div class="nav-menu" id="nav-menu">
@@ -24,8 +36,13 @@
                 </ul>
             </div>
 
-            <div>
+            <div class="nav-actions" style="display: flex; align-items: center; gap: 1rem;">
                 <i class='bx bxs-cart nav-cart'></i>
+                <button id="connect-wallet-btn" class="button" style="font-size: 1rem; padding: 0.5rem 1.2rem;">Connect Wallet</button>
+                <span id="wallet-address" style="margin-left: 0.5rem; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--first-color);"></span>
+                <button id="logout-btn" class="nav-logout">
+                    <i class='bx bx-log-out'></i>
+                </button>
                 <i class='bx bx-menu nav-toggle' id="nav-toggle"></i>
             </div>
         </nav>
@@ -268,7 +285,7 @@
 
     <!-- Background Music Player -->
     <div class="music-player">
-        <audio id="bgMusic" autoplay loop>
+        <audio id="bgMusic" loop>
             <source src="sara.mp3" type="audio/mp3">
             Your browser does not support the audio element.
         </audio>
@@ -288,6 +305,39 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.js"></script>
+    <script>
+    (async function() {
+      const magic = new Magic('pk_live_553444119EF570C8');
+      
+      // Check authentication method and show/hide logout button
+      const logoutBtn = document.getElementById('logout-btn');
+      const isMetaMaskConnected = localStorage.getItem('walletType') === 'metamask';
+      const isEmailAuthenticated = localStorage.getItem('sara_auth');
+
+      // Show logout button only for email authentication
+      if (isEmailAuthenticated && !isMetaMaskConnected) {
+        logoutBtn.style.display = 'block';
+      } else {
+        logoutBtn.style.display = 'none';
+      }
+      
+      // Add logout functionality
+      logoutBtn.addEventListener('click', async () => {
+        try {
+          if (isEmailAuthenticated) {
+            localStorage.removeItem('sara_auth');
+            if (await magic.user.isLoggedIn()) {
+              await magic.user.logout();
+            }
+            window.location.replace('auth.html');
+          }
+        } catch (err) {
+          console.error('Logout error:', err);
+        }
+      });
+    })();
+    </script>
     <script src="main.js"></script>
 </body>
 </html>
