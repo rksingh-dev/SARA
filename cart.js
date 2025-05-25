@@ -125,15 +125,15 @@ async function handleCryptoPayment() {
         // Get cart total
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         
-        // Convert to ETH (assuming 1 ETH = $2000 for demo)
-        const ethAmount = (total / 2000).toFixed(6);
+        // Convert to ETH using the configured rate
+        const ethAmount = (total / window.storeConfig.ethToUsdRate).toFixed(6);
         
         // Request account access
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const fromAddress = accounts[0];
         
-        // Get store wallet address (replace with actual store wallet)
-        const storeAddress = '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
+        // Get store wallet address from config
+        const storeAddress = window.storeConfig.storeWalletAddress;
         
         // Convert ETH amount to Wei
         const amountInWei = (ethAmount * 1e18).toString(16);
