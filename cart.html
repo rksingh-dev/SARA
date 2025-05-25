@@ -3,13 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SARA - Shopping Cart</title>
-     <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <title>Sara</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="cart.css">
     <!-- Add Razorpay Script -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+      // Check both email and MetaMask authentication
+      if (!window.location.pathname.endsWith('auth.html')) {
+        const isMetaMaskConnected = localStorage.getItem('walletConnected') === 'true';
+        const isEmailAuthenticated = localStorage.getItem('sara_auth');
+        
+        // Redirect to auth if neither method is authenticated
+        if (!isMetaMaskConnected && !isEmailAuthenticated) {
+          window.location.href = 'auth.html';
+        }
+      }
+    </script>
 </head>
 <body>
     <header class="l-header">
@@ -53,11 +65,14 @@
                         <span>Total Amount:</span>
                         <span id="total-amount">₹0</span>
                     </div>
-                    <button class="button checkout-button" onclick="handleCheckout()">PROCEED TO CHECKOUT</button>
+                    <div class="payment-options">
+                        <button class="button checkout-button" onclick="handleCheckout()">PAY WITH FIAT</button>
+                        <button class="button crypto-button" onclick="handleCryptoPayment()">PAY WITH ETH</button>
+                    </div>
                 </div>
             </div>
         </section>
-    </main>
+    </main> 
 
     <footer class="footer section">
         <div class="footer-container bd-grid">
