@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SARA | Login</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Load Magic SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/magic-sdk@latest/dist/magic.js"></script>
+    <!-- Load Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body style="background: var(--gray-color); min-height: 100vh;">
+    <div class="auth-container fade-in">
+        <div class="auth-card scale-in">
+            <div class="nav-logo">SARA</div>
+            <h2 class="section-title">Sign in to Continue</h2>
+            
+            <!-- MetaMask Button -->
+            <button id="connect-metamask" class="button auth-btn" style="
+                margin-bottom: 1rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                background: var(--first-color);
+            ">
+                <i class='bx bxs-wallet' style="font-size: 1.2rem;"></i>
+                Connect with MetaMask
+            </button>
+            
+            <div class="auth-divider">
+                <span>or</span>
+            </div>
+
+            <form id="login-form" class="auth-form">
+                <input type="email" id="email" class="auth-input" placeholder="Enter your email" required autocomplete="email" />
+                <button type="submit" class="button auth-btn">Login with Magic Link</button>
+            </form>
+            <div id="auth-message" class="auth-message"></div>
+            <div id="auth-error" class="auth-error" style="display: none; color: var(--first-color); margin-top: 1rem; text-align: center;"></div>
+        </div>
+    </div>
+
+    <style>
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--text-color);
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--text-color-light);
+        }
+
+        .auth-divider span {
+            padding: 0 1rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 0.8rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            background: var(--first-color-alt);
+        }
+
+        .auth-btn:active {
+            transform: translateY(0);
+        }
+    </style>
+
+    <script>
+        // Check if already connected with either method
+        const isMetaMaskConnected = localStorage.getItem('walletConnected') === 'true';
+        const isEmailAuthenticated = localStorage.getItem('sara_auth');
+        
+        // Only redirect if both checks pass
+        if (isMetaMaskConnected && isEmailAuthenticated) {
+            window.location.replace('index.html');
+        }
+
+        // Check if Magic SDK loaded successfully
+        if (typeof Magic === 'undefined') {
+            document.getElementById('auth-error').textContent = 'Authentication service failed to load. Please refresh the page.';
+            document.getElementById('auth-error').style.display = 'block';
+            document.getElementById('login-form').style.display = 'none';
+        }
+
+        // MetaMask Connection
+        document.getElementById('connect-metamask').addEventListener('click', async () => {
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    throw new Error('MetaMask is not installed');
+                }
+
+                // Request account access
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const address = accounts[0];
+                
+                if (address) {
+                    // Verify the connection is active
+                    const isConnected = await window.ethereum.request({ method: 'eth_accounts' });
+                    if (isConnected.length === 0) {
+                        throw new Error('No active MetaMask connection');
+                    }
+
+                    // Store MetaMask connection state
+                    localStorage.setItem('walletConnected', 'true');
+                    localStorage.setItem('walletType', 'metamask');
+                    localStorage.setItem('walletAddress', address);
+                    
+                    // Show success message
+                    const authMessage = document.getElementById('auth-message');
+                    authMessage.textContent = 'Wallet connected successfully! Redirecting...';
+                    authMessage.style.color = 'var(--first-color)';
+                    
+                    // Redirect to main page
+                    window.location.replace('index.html');
+                }
+            } catch (error) {
+                const authError = document.getElementById('auth-error');
+                authError.style.display = 'block';
+                if (error.message === 'MetaMask is not installed') {
+                    authError.textContent = 'Please install MetaMask to connect your wallet';
+                } else if (error.message === 'No active MetaMask connection') {
+                    authError.textContent = 'Please connect your MetaMask wallet first';
+                } else {
+                    authError.textContent = 'Failed to connect wallet. Please try again.';
+                }
+            }
+        });
+
+        // Handle MetaMask account changes
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', function (accounts) {
+                if (accounts.length === 0) {
+                    // User disconnected their wallet
+                    localStorage.removeItem('walletConnected');
+                    localStorage.removeItem('walletType');
+                    localStorage.removeItem('walletAddress');
+                    window.location.replace('auth.html');
+                }
+            });
+        }
+    </script>
+    <script src="auth.js"></script>
+</body>
+</html> 
