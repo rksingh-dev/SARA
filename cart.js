@@ -1,6 +1,24 @@
 // Cart functionality
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
+// Check MetaMask connection
+function checkMetaMaskConnection() {
+    const isMetaMaskConnected = localStorage.getItem('walletConnected') === 'true';
+    const cryptoButton = document.querySelector('.crypto-button');
+    
+    if (cryptoButton) {
+        if (!isMetaMaskConnected) {
+            cryptoButton.style.opacity = '0.5';
+            cryptoButton.style.cursor = 'not-allowed';
+            cryptoButton.title = 'Please connect MetaMask first';
+        } else {
+            cryptoButton.style.opacity = '1';
+            cryptoButton.style.cursor = 'pointer';
+            cryptoButton.title = 'Pay with ETH';
+        }
+    }
+}
+
 // Update cart display
 function updateCartDisplay() {
     const cartItems = document.getElementById('cart-items');
@@ -36,6 +54,9 @@ function updateCartDisplay() {
         `;
         cartItems.appendChild(cartItem);
     });
+
+    // Check MetaMask connection status
+    checkMetaMaskConnection();
 }
 
 // Update item quantity
@@ -57,8 +78,11 @@ function saveCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-// Initialize cart display
-updateCartDisplay();
+// Initialize cart and check MetaMask connection on page load
+document.addEventListener('DOMContentLoaded', () => {
+    updateCartDisplay();
+    checkMetaMaskConnection();
+});
 
 // Add to cart functionality (to be called from product pages)
 function addToCart(product) {
@@ -78,5 +102,116 @@ function addToCart(product) {
     
     saveCart();
     updateCartDisplay();
+}
+
+// Handle crypto payment
+async function handleCryptoPayment() {
+    try {
+        // Check if MetaMask is installed
+        if (typeof window.ethereum === 'undefined') {
+            alert('Please install MetaMask to make crypto payments');
+            window.location.href = 'auth.html';
+            return;
+        }
+
+        // Check if MetaMask is connected
+        const isMetaMaskConnected = localStorage.getItem('walletConnected') === 'true';
+        if (!isMetaMaskConnected) {
+            alert('Please connect your MetaMask wallet first');
+            window.location.href = 'auth.html';
+            return;
+        }
+
+        // Get cart total
+        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        
+        // Convert to ETH (assuming 1 ETH = $2000 for demo)
+        const ethAmount = (total / 2000).toFixed(6);
+        
+        // Request account access
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const fromAddress = accounts[0];
+        
+        // Get store wallet address (replace with actual store wallet)
+        const storeAddress = '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
+        
+        // Convert ETH amount to Wei
+        const amountInWei = (ethAmount * 1e18).toString(16);
+        
+        // Send transaction
+        const txHash = await window.ethereum.request({
+            method: 'eth_sendTransaction',
+            params: [{
+                from: fromAddress,
+                to: storeAddress,
+                value: '0x' + amountInWei,
+                gas: '0x5208' // 21000 gas
+            }]
+        });
+        
+        // Show success message
+        alert(`Payment successful! Transaction hash: ${txHash}`);
+        
+        // Clear cart
+        cart = [];
+        saveCart();
+        updateCartDisplay();
+        
+        // Show thank you message
+        showThankYouPopup(txHash);
+        
+    } catch (error) {
+        console.error('Payment error:', error);
+        if (error.code === 4001) {
+            // User rejected the transaction
+            alert('Transaction was rejected. Please try again.');
+        } else {
+            alert('Payment failed: ' + error.message);
+        }
+    }
+}
+
+// Show thank you popup
+function showThankYouPopup(txHash) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    `;
+
+    const popup = document.createElement('div');
+    popup.style.cssText = `
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+    `;
+
+    popup.innerHTML = `
+        <h2 style="color: #E55947; margin-bottom: 1rem;">Thank You for Your Purchase!</h2>
+        <p style="margin-bottom: 1.5rem;">Your order has been successfully placed.</p>
+        <p style="color: #606060; margin-bottom: 1.5rem;">Transaction Hash: ${txHash}</p>
+        <button class="button" style="background: #E55947; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer;">Continue Shopping</button>
+    `;
+
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+
+    // Add click handler to the continue shopping button
+    const continueBtn = popup.querySelector('button');
+    continueBtn.addEventListener('click', () => {
+        overlay.remove();
+        window.location.href = "index.html";
+    });
 }
 
